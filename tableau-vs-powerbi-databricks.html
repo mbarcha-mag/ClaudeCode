@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableau Cloud Edition+ vs Power BI</title>
+<style>
+  :root{
+    --orange:#E8762B;
+    --blue:#1F77B4;
+    --dark:#1a1a1a;
+    --gray:#666666;
+    --light-gray:#f4f4f4;
+    --border:#e2e2e2;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    padding:0;
+    background:#ffffff;
+    color:var(--dark);
+    font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  }
+  .slide{
+    display:none;
+    min-height:100vh;
+    width:100%;
+    align-items:center;
+    justify-content:center;
+    padding:70px 24px 48px;
+  }
+  .slide.active{display:flex;}
+  .slide-inner{width:100%;max-width:860px;}
+
+  h1.title{font-size:42px;line-height:1.15;margin:0 0 18px;color:var(--dark);}
+  h2.slide-title{
+    font-size:28px;margin:0 0 26px;color:var(--dark);
+    border-left:6px solid var(--orange);padding-left:16px;
+  }
+  .subtitle{font-size:19px;color:var(--blue);margin:0 0 10px;font-weight:500;}
+  .footnote{font-size:14px;color:var(--gray);margin-top:44px;}
+
+  /* Slide 1 */
+  .title-slide{text-align:center;}
+  .brand-bar{width:72px;height:6px;background:var(--orange);margin:0 auto 30px;border-radius:3px;}
+
+  /* Table (slide 2) */
+  table.compare{width:100%;border-collapse:collapse;margin-bottom:22px;font-size:14.5px;}
+  table.compare th, table.compare td{border:1px solid var(--border);padding:11px 13px;text-align:left;vertical-align:top;}
+  table.compare thead th{color:#fff;font-size:13.5px;text-transform:uppercase;letter-spacing:.03em;}
+  table.compare thead th.dim{background:var(--dark);}
+  table.compare thead th.pbi{background:var(--blue);}
+  table.compare thead th.tab{background:var(--orange);}
+  table.compare tbody td.dim{font-weight:600;background:var(--light-gray);}
+  table.compare tbody tr:nth-child(even){background:#fafafa;}
+
+  .msg-box{border-left:5px solid var(--orange);background:#FFF6EF;padding:16px 20px;font-size:15.5px;font-weight:600;color:var(--dark);border-radius:0 6px 6px 0;}
+
+  /* Slide 3 - case card */
+  .case-card{border:1px solid var(--border);border-radius:10px;padding:26px 28px;box-shadow:0 2px 12px rgba(0,0,0,.05);}
+  .case-card h3{margin:0 0 3px;font-size:21px;color:var(--dark);}
+  .case-sub{color:var(--gray);font-size:13.5px;margin:0 0 18px;}
+  .case-card h4{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);margin:16px 0 8px;}
+  .case-card ul{margin:0;padding-left:20px;font-size:14.5px;}
+  .case-card li{margin-bottom:6px;}
+  .case-card p{font-size:14.5px;line-height:1.5;margin:0;}
+  .quote-box{background:var(--light-gray);border-radius:8px;padding:13px 16px;font-size:13.5px;font-style:italic;color:var(--dark);margin-top:14px;border-left:4px solid var(--blue);line-height:1.5;}
+  .closing-line{margin-top:18px;font-size:16px;font-weight:700;color:var(--orange);text-align:center;}
+
+  /* Slide 4 - chart */
+  .chart-wrap{text-align:center;}
+  svg{max-width:100%;height:auto;}
+
+  /* Slide 5 - two columns */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-bottom:22px;}
+  .col h4{font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin:0 0 12px;padding-bottom:9px;border-bottom:2px solid;}
+  .col.left h4{color:var(--blue);border-color:var(--blue);}
+  .col.right h4{color:var(--orange);border-color:var(--orange);}
+  .col ul{list-style:none;margin:0;padding:0;}
+  .col li{margin-bottom:9px;padding-left:20px;position:relative;font-size:14px;line-height:1.4;}
+  .col.left li::before{content:"\25CF";color:var(--blue);position:absolute;left:0;font-size:10px;top:4px;}
+  .col.right li::before{content:"\25CF";color:var(--orange);position:absolute;left:0;font-size:10px;top:4px;}
+  .msg-box.split div{margin-bottom:6px;}
+  .msg-box.split div:last-child{margin-bottom:0;}
+
+  /* Slide 6 - risk cards */
+  .cards-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:22px;}
+  .risk-card{border:1px solid var(--border);border-radius:10px;padding:18px;background:#fff;}
+  .risk-card h4{font-size:15px;color:var(--orange);margin:0 0 9px;}
+  .risk-card p{font-size:13.5px;line-height:1.5;margin:0;color:var(--dark);}
+  .closing-banner{margin-top:6px;text-align:center;font-size:17px;font-weight:700;color:#fff;background:var(--dark);padding:16px 20px;border-radius:8px;}
+
+  /* Tab bar */
+  .tabbar{
+    position:fixed;top:0;left:0;width:100%;
+    background:#ffffff;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    display:flex;
+    justify-content:center;
+    z-index:100;
+  }
+  .tabbar .tab-link{
+    font-family:inherit;
+    font-size:14px;
+    font-weight:500;
+    padding:16px 20px;
+    background:#ffffff;
+    color:#666666;
+    border:none;
+    border-bottom:3px solid transparent;
+    cursor:pointer;
+    transition:color .2s;
+  }
+  .tabbar .tab-link:hover{color:var(--orange);}
+  .tabbar .tab-link.active{color:var(--orange);border-bottom-color:var(--orange);}
+
+  /* Slide 3 source note */
+  .source-note{font-size:12px;color:var(--gray);margin-top:12px;}
+
+  @media (max-width:700px){
+    .two-col, .cards-row{grid-template-columns:1fr;}
+    h1.title{font-size:32px;}
+    h2.slide-title{font-size:23px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="tabbar" id="tabbar">
+  <button type="button" class="tab-link active" data-index="0">Inicio</button>
+  <button type="button" class="tab-link" data-index="1">TCO Real</button>
+  <button type="button" class="tab-link" data-index="2">Caso de Costo</button>
+  <button type="button" class="tab-link" data-index="3">Precipicio Fabric</button>
+  <button type="button" class="tab-link" data-index="4">Databricks</button>
+  <button type="button" class="tab-link" data-index="5">El Conflicto</button>
+</nav>
+
+<div class="deck">
+
+  <!-- SLIDE 1 -->
+  <section class="slide active">
+    <div class="slide-inner title-slide">
+      <div class="brand-bar"></div>
+      <h1 class="title">Tableau Cloud Edition+ vs Power BI</h1>
+      <p class="subtitle">Por qué Tableau gana en TCO y potencia tu inversión en Databricks</p>
+      <p class="footnote">Miguel Barcha · Analytics Account Executive · Julio 2026</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 2 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2 class="slide-title">Power BI no es gratis a escala</h2>
+      <table class="compare">
+        <thead>
+          <tr>
+            <th class="dim">Dimensión</th>
+            <th class="pbi">Power BI</th>
+            <th class="tab">Tableau Cloud+</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dim">Precio base</td>
+            <td>$10/usuario/mes (Pro)</td>
+            <td>$15/usuario/mes (Viewer)</td>
+          </tr>
+          <tr>
+            <td class="dim">IA y Copilot</td>
+            <td>Requiere Microsoft Fabric (modelo F-SKU por capacidad)</td>
+            <td>Incluido en Cloud+</td>
+          </tr>
+          <tr>
+            <td class="dim">A escala (250+ usuarios)</td>
+            <td>Fabric F64+ requerido &rarr; más de $5.000/mes de capacidad</td>
+            <td>Precio plano por usuario, sin modelo de capacidad</td>
+          </tr>
+          <tr>
+            <td class="dim">Límites de datos</td>
+            <td>1 GB / 8 refrescadas al día (Pro)</td>
+            <td>Sin límites con motor Hyper</td>
+          </tr>
+          <tr>
+            <td class="dim">Dependencia cloud</td>
+            <td>Requiere Azure para desbloquear AI completa</td>
+            <td>Cloud-agnóstico: AWS, Azure, GCP</td>
+          </tr>
+          <tr>
+            <td class="dim">TCO a 3 años</td>
+            <td>29% más caro (estudio independiente IIIE)</td>
+            <td>29% menor TCO</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="msg-box">El momento en que agregas IA, escalas usuarios o necesitas refrescadas confiables — el costo real de Power BI aparece rápido.</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2 class="slide-title">El costo real aparece a escala</h2>
+      <table class="compare">
+        <thead>
+          <tr>
+            <th class="dim">Escenario</th>
+            <th class="pbi">Power BI</th>
+            <th class="tab">Tableau Cloud+</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dim">250 usuarios con AI</td>
+            <td>Fabric F64 requerido &rarr; +$5.000/mes de capacidad</td>
+            <td>$3.750/mes plano (250 &times; $15 Viewer)</td>
+          </tr>
+          <tr>
+            <td class="dim">Dataset &gt; 1 GB</td>
+            <td>Requiere Premium o Fabric</td>
+            <td>Sin límite con Hyper</td>
+          </tr>
+          <tr>
+            <td class="dim">Refrescadas de datos</td>
+            <td>Máximo 8/día en Pro</td>
+            <td>Sin límite</td>
+          </tr>
+          <tr>
+            <td class="dim">Stack con Databricks</td>
+            <td>Cada query consume DBUs</td>
+            <td>Hyper desacopla el cómputo — DBUs protegidos</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="msg-box">TCO a 3 años: Tableau es 29% más económico que Power BI (estudio independiente IIIE).</div>
+      <p class="source-note">Fuente: IIIE Independent Study. Precios Power BI: microsoft.com. Precios Tableau: salesforce.com/tableau</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 4 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2 class="slide-title">El precipicio de Microsoft Fabric</h2>
+      <div class="chart-wrap">
+        <svg viewBox="0 0 780 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gráfico ilustrativo: costo de Tableau crece de forma gradual y predecible; costo de Power BI se mantiene plano y luego salta bruscamente al requerir Microsoft Fabric para IA.">
+          <line x1="60" y1="370" x2="740" y2="370" stroke="#cccccc" stroke-width="2"/>
+          <line x1="60" y1="370" x2="60" y2="40" stroke="#cccccc" stroke-width="2"/>
+
+          <line x1="395" y1="370" x2="395" y2="70" stroke="#999999" stroke-width="1.5" stroke-dasharray="5 5"/>
+
+          <polyline points="60,355 740,180" fill="none" stroke="#E8762B" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="740" cy="180" r="5" fill="#E8762B"/>
+
+          <polyline points="60,345 380,335 410,100 740,85" fill="none" stroke="#1F77B4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="740" cy="85" r="5" fill="#1F77B4"/>
+
+          <text x="400" y="40" font-size="16" text-anchor="middle">&#9888;</text>
+          <text x="400" y="60" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle" font-family="system-ui, Arial, sans-serif">Fabric requerido para IA</text>
+
+          <text x="555" y="207" font-size="14" font-weight="700" fill="#E8762B" font-family="system-ui, Arial, sans-serif">Tableau — predecible</text>
+          <text x="555" y="118" font-size="14" font-weight="700" fill="#1F77B4" font-family="system-ui, Arial, sans-serif">Power BI — el precipicio Fabric</text>
+
+          <text x="400" y="400" font-size="13" fill="#666666" text-anchor="middle" font-family="system-ui, Arial, sans-serif">Tiempo / escala de usuarios &rarr;</text>
+          <text x="28" y="205" font-size="13" fill="#666666" text-anchor="middle" font-family="system-ui, Arial, sans-serif" transform="rotate(-90 28 205)">Costo total</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2 class="slide-title">Ya tienes Databricks. Tableau lo potencia.</h2>
+      <div class="two-col">
+        <div class="col left">
+          <h4>Lo que Databricks te da</h4>
+          <ul>
+            <li>Lakehouse world-class e ingeniería de datos</li>
+            <li>SQL para equipos técnicos</li>
+            <li>Databricks AI/BI (Genie) para científicos de datos</li>
+            <li>Delta Lake y Unity Catalog</li>
+          </ul>
+        </div>
+        <div class="col right">
+          <h4>Lo que Tableau añade</h4>
+          <ul>
+            <li>Usuarios de negocio sin SQL (drag &amp; drop)</li>
+            <li>Insights proactivos con IA vía Tableau Pulse</li>
+            <li>Motor Hyper: cómputo analítico desacoplado del gasto en DBUs</li>
+            <li>Gobernanza visual a escala</li>
+            <li>Analytics agéntico vía Tableau Agent (lenguaje natural)</li>
+            <li>Knowledge Graph (H2 2026): capa semántica abierta, legible por cualquier agente de IA vía MCP</li>
+            <li>Integración nativa con Databricks desde 2019 — Tableau es ISV Business App Partner of the Year 2026 de Databricks</li>
+          </ul>
+        </div>
+      </div>
+      <div class="msg-box split">
+        <div>Tableau + Databricks = Poder del lakehouse + Analytics para todos los usuarios de negocio</div>
+        <div>Power BI + Databricks = Dos plataformas competidoras peleando por tu capa de datos</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2 class="slide-title">El conflicto que no quieres tener</h2>
+      <div class="cards-row">
+        <div class="risk-card">
+          <h4>Conflicto arquitectónico</h4>
+          <p>Microsoft Fabric compite directamente con Databricks Lakehouse. Elegir Power BI significa subsidiar a un competidor de tu plataforma de datos central.</p>
+        </div>
+        <div class="risk-card">
+          <h4>Costos de DBUs ocultos</h4>
+          <p>Con el modelo de consumo de Fabric, los costos escalan sin control cuando los workloads agénticos crecen. Tableau Hyper desacopla el cómputo analítico del data warehouse — puedes correr analytics agéntico sin &ldquo;impuesto de compute&rdquo;. Tu factura de DBUs se mantiene predecible.</p>
+        </div>
+        <div class="risk-card">
+          <h4>Lock-in de IA</h4>
+          <p>La IA de Power BI requiere Azure. Tableau Agent y Knowledge Graph funcionan vía estándares abiertos (MCP) — sin lock-in de cloud.</p>
+        </div>
+      </div>
+      <div class="closing-banner">Databricks eligió a Tableau como BI Partner of the Year — 3 años consecutivos. Eso no es coincidencia.</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  var slides = document.querySelectorAll('.slide');
+  var tabs = document.querySelectorAll('.tabbar .tab-link');
+
+  function showSlide(index){
+    for(var i=0;i<slides.length;i++){
+      slides[i].classList.toggle('active', i === index);
+    }
+    for(var j=0;j<tabs.length;j++){
+      tabs[j].classList.toggle('active', j === index);
+    }
+  }
+
+  for(var k=0;k<tabs.length;k++){
+    tabs[k].addEventListener('click', function(){
+      showSlide(parseInt(this.getAttribute('data-index'), 10));
+    });
+  }
+
+  showSlide(0);
+})();
+</script>
+
+</body>
+</html>
